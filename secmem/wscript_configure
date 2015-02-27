@@ -1,0 +1,21 @@
+#!/bin/env python
+
+conf.check_cxx(header_name='sys/mman.h',
+  mandatory=True)
+
+conf.check_cxx(header_name='unistd.h',
+  mandatory=True)
+
+conf.check_cxx(header_name='errno.h',
+  mandatory=True)
+
+conf.check_cxx(header_name='boost/atomic/atomic.hpp',
+  mandatory=True)
+
+# check if atomic<int> is lock free so we can use header-only boost_atomic
+conf.check_cxx(fragment='''
+#include <boost/atomic/atomic.hpp>
+int main() {
+  return BOOST_ATOMIC_INT_LOCK_FREE - 2;
+}
+''', execute=True, msg='Checking if boost_atomic is lock free for integers');

@@ -1,0 +1,5 @@
+#!/bin/env python
+
+bld.shlib(target='secmem',
+  export_includes='.',
+  source=bld.path.ant_glob('**/*.cpp'))
