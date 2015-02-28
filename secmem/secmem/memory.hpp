@@ -150,12 +150,16 @@ public:
    *
    * May produce an error, always check HasError().
    */
-  inline void Protect(int protection) {
+  inline bool Protect(int protection) {
     error = 0;
 
     if (-1 == mprotect(Get(), size, protection)) {
       error = errno;
+
+      return false;
     }
+
+    return true;
   }
 
   /*
@@ -181,10 +185,27 @@ public:
   }
 
   /*
+   * Returns the first address of the memory block shifted byte_offset bytes
+   * to the right. Also, don't try to be too smart about this.
+   */
+  inline void* Get(size_t byte_offset) const {
+    assert (byte_offset < Size());
+
+    return (void*) (((char*) memory) + byte_offset);
+  }
+
+  /*
    * Same as Get().
    */
   inline void* operator()() const {
     return Get();
+  }
+
+  /*
+   * Same as Get(size_t).
+   */
+  inline void* operator()(size_t byte_offset) const {
+    return Get(byte_offset);
   }
 
   inline Memory& operator=(const Memory& m) {

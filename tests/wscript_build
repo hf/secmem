@@ -3,3 +3,7 @@
 bld.program(target='test_memory',
   source = bld.path.ant_glob('memory/**/*.cpp'),
   use = ['secmem', 'catch'])
+
+bld.program(target='test_array',
+  source = bld.path.ant_glob('array/**/*.cpp'),
+  use = ['secmem', 'catch'])
