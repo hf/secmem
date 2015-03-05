@@ -31,6 +31,22 @@ namespace Protection {
   static const int RWX = RW | EXECUTE;
 } // Protection
 
+// Tries to securely clear memory.
+// See: http://www.open-std.org/jtc1/sc22/wg14/www/docs/n1381.pdf
+static void* SecureMemset(void* const memory, unsigned char v, size_t n) {
+  #pragma optimize("", off)
+
+  volatile unsigned char* p = (unsigned char*) memory;
+  while (n--) {
+    *p = v;
+    p++;
+  }
+
+  #pragma optimize("", on)
+
+  return memory;
+}
+
 /*
  * Holds a chunk of secure memory.
  *
@@ -166,7 +182,7 @@ public:
    * Fills the memory block with value.
    */
   inline void Fill(unsigned char value) const {
-    memset(Get(), value, size);
+    SecureMemset(Get(), value, size);
   }
 
   /*
