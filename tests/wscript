@@ -1,0 +1,20 @@
+#!/bin/env python
+
+def options(opt):
+  opt.recurse('vendor')
+
+def configure(conf):
+  conf.recurse('vendor')
+
+  conf.define('SECMEM_TEST', 1)
+
+def build(bld):
+  bld.recurse('vendor')
+
+  bld.program(target='test_memory',
+    source = bld.path.ant_glob('memory/**/*.cpp'),
+    use = ['secmem', 'catch'])
+
+  bld.program(target='test_array',
+    source = bld.path.ant_glob('array/**/*.cpp'),
+    use = ['secmem', 'catch'])

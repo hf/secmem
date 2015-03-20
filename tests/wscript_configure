@@ -1,3 +1,0 @@
-#!/bin/env python
-
-conf.define('SECMEM_TEST', 1)
